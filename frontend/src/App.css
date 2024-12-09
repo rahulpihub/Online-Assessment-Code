@@ -1,0 +1,224 @@
+/* Home page style */
+/* Styling for Home Component */
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+.home-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.button-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+}
+
+.btn {
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.create-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.bulk-btn {
+  background-color: #2196f3;
+  color: white;
+}
+
+.library-btn {
+  background-color: #ff9800;
+  color: white;
+}
+
+.ai-btn {
+  background-color: #9c27b0;
+  color: white;
+}
+
+.btn:hover {
+  opacity: 0.8;
+  transform: scale(1.05);
+}
+
+/* staffhome.css */
+/* General Styles */
+.staff-home-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  color: #333;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+/* Service Card */
+.service-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.service-title {
+  font-size: 1.5rem;
+  color: #007bff;
+  margin-bottom: 15px;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.btn {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.preview-btn {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.edit-session-btn {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.add-questions-btn {
+  background-color: #ffc107;
+  color: #333;
+}
+
+.edit-btn {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  opacity: 0.9;
+}
+
+/* Details Section */
+.details {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.details p {
+  margin: 5px 0;
+}
+
+.details span {
+  font-weight: bold;
+}
+
+/* Editquestion.css */
+
+.edit-question-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+textarea,
+input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+textarea {
+  height: 80px;
+  resize: none;
+}
+
+.add-option-btn,
+.submit-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-option-btn {
+  margin-top: 10px;
+}
+
+.add-option-btn:hover,
+.submit-btn:hover {
+  background-color: #0056b3;
+}

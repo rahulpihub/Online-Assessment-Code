@@ -12,7 +12,7 @@ const StaffHome = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Fetch data from the backend
+        // Fetch data from the backend for the staff home page
         axios.get('http://localhost:8000/staff/staffhome/')
             .then(response => {
                 setMessage(response.data.message);
@@ -45,6 +45,11 @@ const StaffHome = () => {
         navigate('/');
     };
 
+    const handleEditQuestionClick = () => {
+        // This can be enhanced later if you want to edit specific questions
+        navigate('/editquestion');
+    };
+
     if (loading) return <div className="loading">Loading...</div>;
     if (error) return <div className="error">{error}</div>;
 
@@ -61,7 +66,9 @@ const StaffHome = () => {
                 <div className="buttons">
                     <button className="btn preview-btn">Preview</button>
                     <button className="btn edit-session-btn">Edit Session</button>
-                    <button className="btn add-questions-btn"> Edit Question</button>
+                    <button className="btn add-questions-btn" onClick={handleEditQuestionClick}>
+                        Edit Question
+                    </button>
                     <button
                         className="btn edit-btn"
                         onClick={handleAddQuestionClick}
@@ -71,7 +78,7 @@ const StaffHome = () => {
                 </div>
                 <div className="details">
                     <p>Duration: <span>30 Min</span></p>
-                    <p>No of Questions: <span>20</span></p>
+                    <p>No of Questions: <span>{questions.length}</span></p>
                 </div>
             </div>
 
@@ -101,4 +108,3 @@ const StaffHome = () => {
 };
 
 export default StaffHome;
-

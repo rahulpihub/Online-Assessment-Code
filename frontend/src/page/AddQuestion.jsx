@@ -16,6 +16,7 @@ const AddQuestion = () => {
     const [activeQuestion, setActiveQuestion] = useState(null);
 
     const navigate = useNavigate();
+    
 
     const handleOptionChange = (index, value) => {
         const newOptions = [...options];
@@ -71,6 +72,7 @@ const AddQuestion = () => {
     };
 
     return (
+        
         <div className="mainContainer">
             {/* Left Grid View */}
             <div className="gridContainer">

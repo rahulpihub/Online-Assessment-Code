@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from .models import Question  # Assuming you have a Question model
 
 class StaffHomeView(APIView):
     def get(self, request, *args, **kwargs):
@@ -11,13 +12,6 @@ class StaffHomeView(APIView):
         }
         return Response(data, status=status.HTTP_200_OK)
 
-
-
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from .models import Question  # Assuming you have a Question model
 
 class AddQuestionView(APIView):
     def post(self, request, *args, **kwargs):
@@ -39,9 +33,47 @@ class AddQuestionView(APIView):
                 mark=mark,
                 negative_mark=negative_mark
             )
-            return Response({"success": "Inputs are submitted!"}, status=status.HTTP_200_OK)
-        
+
+            # Fetch all the questions after saving the new one
+            all_questions = Question.objects.all().values()
+            
+            return Response({"success": "Inputs are submitted!", "questions": list(all_questions)}, status=status.HTTP_200_OK)
+
         except Exception as e:
             print(f"Error occurred: {e}")  # Log error to console
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Question
+from .serializers import QuestionSerializer
+
+class QuestionListView(APIView):
+    def get(self, request):
+        # Fetch all questions
+        questions = Question.objects.all()
+        serializer = QuestionSerializer(questions, many=True)
+        return Response(serializer.data)
+
+    def put(self, request):
+        # Update multiple questions or a specific question
+        updated_questions = []
+        for question_data in request.data:
+            try:
+                question = Question.objects.get(id=question_data['id'])  # Using id to identify each question
+                serializer = QuestionSerializer(question, data=question_data, partial=True)
+                if serializer.is_valid():
+                    serializer.save()
+                    updated_questions.append(serializer.data)
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            except Question.DoesNotExist:
+                return Response({"error": f"Question with id {question_data['id']} not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        return Response(updated_questions, status=status.HTTP_200_OK)
+
+
+
 

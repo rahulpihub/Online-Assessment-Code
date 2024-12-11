@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../css/AddQuestion.css';
@@ -16,7 +16,11 @@ const AddQuestion = () => {
     const [activeQuestion, setActiveQuestion] = useState(null);
 
     const navigate = useNavigate();
-    
+
+    useEffect(() => {
+        const savedQuestions = JSON.parse(sessionStorage.getItem('questions')) || [];
+        setQuestionsList(savedQuestions);
+    }, []);
 
     const handleOptionChange = (index, value) => {
         const newOptions = [...options];
@@ -46,8 +50,12 @@ const AddQuestion = () => {
                 const newQuestion = { question, options, correctOption, mark, negativeMark };
                 savedQuestions.push(newQuestion);
                 sessionStorage.setItem('questions', JSON.stringify(savedQuestions));
-                setQuestionsList([...savedQuestions]);
-                navigate('/addquestion');
+                setQuestionsList(savedQuestions);
+                setQuestion('');
+                setOptions(['', '', '']);
+                setCorrectOption('');
+                setMark('');
+                setNegativeMark('');
             }
         } catch (err) {
             setError(err.response?.data?.error || 'Failed to add question. Please try again.');
@@ -58,7 +66,33 @@ const AddQuestion = () => {
     };
 
     const handleGridTileClick = (index) => {
-        setActiveQuestion(questionsList[index]);
+        const selectedQuestion = questionsList[index];
+        setActiveQuestion(selectedQuestion);
+        setQuestion(selectedQuestion.question);
+        setOptions(selectedQuestion.options);
+        setCorrectOption(selectedQuestion.correctOption);
+        setMark(selectedQuestion.mark);
+        setNegativeMark(selectedQuestion.negativeMark);
+    };
+
+    const handleEditQuestion = () => {
+        const updatedQuestions = [...questionsList];
+        const index = questionsList.findIndex((q) => q.question === activeQuestion.question);
+        updatedQuestions[index] = {
+            question,
+            options,
+            correctOption,
+            mark,
+            negativeMark,
+        };
+        sessionStorage.setItem('questions', JSON.stringify(updatedQuestions));
+        setQuestionsList(updatedQuestions);
+        setActiveQuestion(null);
+        setQuestion('');
+        setOptions(['', '', '']);
+        setCorrectOption('');
+        setMark('');
+        setNegativeMark('');
     };
 
     const handleNext = () => {
@@ -72,7 +106,6 @@ const AddQuestion = () => {
     };
 
     return (
-        
         <div className="mainContainer">
             {/* Left Grid View */}
             <div className="gridContainer">
@@ -90,7 +123,7 @@ const AddQuestion = () => {
 
             {/* Right Form View */}
             <div className="formContainer">
-                <h1 className="heading">Add Question</h1>
+                <h1 className="heading">{activeQuestion ? 'Edit Question' : 'Add Question'}</h1>
                 <div className="formGroup">
                     <label className="label">Question*</label>
                     <textarea
@@ -156,9 +189,15 @@ const AddQuestion = () => {
                 {error && <p className="message errorMessage">{error}</p>}
 
                 <div className="formActions">
-                    <button className="button primaryButton" onClick={handleSubmit}>
-                        Submit
-                    </button>
+                    {activeQuestion ? (
+                        <button className="button primaryButton" onClick={handleEditQuestion}>
+                            Save Changes
+                        </button>
+                    ) : (
+                        <button className="button primaryButton" onClick={handleSubmit}>
+                            Submit
+                        </button>
+                    )}
                     <button className="button primaryButton" onClick={handleNext}>
                         Next
                     </button>

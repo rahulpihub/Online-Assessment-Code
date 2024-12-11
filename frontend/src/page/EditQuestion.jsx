@@ -1,135 +1,66 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../css/EditQuestion.css';
 
 const EditQuestion = () => {
-  const navigate = useNavigate();
-  const [questions, setQuestions] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+    const [questions, setQuestions] = useState([]); // To hold the question data from session storage
+    const navigate = useNavigate();
 
-  // Fetch all the question data when the component mounts
-  useEffect(() => {
-    fetch(`http://localhost:8000/staff/editquestion/`)  // No ID in URL
-      .then(response => response.json())
-      .then(data => {
-        setQuestions(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        setError('Error fetching question data');
-        setLoading(false);
-      });
-  }, []);
+    useEffect(() => {
+        // Fetch the saved questions from session storage
+        const savedQuestions = JSON.parse(sessionStorage.getItem('questions')) || [];
+        setQuestions(savedQuestions);
+    }, []);
 
-  // Handle input changes for each question
-  const handleChange = (e, index) => {
-    const { name, value } = e.target;
-    const updatedQuestions = [...questions];
-    
-    if (name === 'options') {
-      updatedQuestions[index][name] = value.split(',').map(option => option.trim()); // Convert to array of options
-    } else {
-      updatedQuestions[index][name] = value;
+    const handleBackClick = () => {
+        // Navigate back to staff home page
+        navigate('/staffhome');
+    };
+
+    const handleEditClick = (index) => {
+        // Navigate to the edit page for a specific question (you can modify this as needed)
+        navigate(`/editquestion/${index}`);
+    };
+
+    if (questions.length === 0) {
+        return <div className="no-questions">No questions available to edit.</div>;
     }
-    
-    setQuestions(updatedQuestions);
-  };
 
-  // Handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
+    return (
+        <div className="edit-question-container">
+            <h1 className="title">Edit Questions</h1>
+            <p className="subtitle">Here you can edit the questions.</p>
 
-    // Send the updated question data to the Django API
-    fetch(`http://localhost:8000/staff/editquestion/`, {  // No ID in URL
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(questions),  // Send all questions
-    })
-      .then(response => response.json())
-      .then(data => {
-        // On success, redirect back to the question list or some other page
-        navigate('/questions');
-      })
-      .catch(err => {
-        setError('Error updating questions');
-      });
-  };
+            {/* Back Button */}
+            <button className="btn back-btn" onClick={handleBackClick}>Back</button>
 
-  if (loading) {
-    return <div className="loading">Loading...</div>;
-  }
+            <div className="questions-container">
+                <h3>Questions Added:</h3>
+                <ul>
+                    {questions.map((question, index) => (
+                        <li key={index} className="question-item">
+                            <h4>{question.question}</h4>
+                            <ul className="options-list">
+                                {question.options.map((option, idx) => (
+                                    <li key={idx} className="option-item">{option}</li>
+                                ))}
+                            </ul>
+                            <p><strong>Correct Option:</strong> {question.correctOption}</p>
+                            <p><strong>Mark:</strong> {question.mark}</p>
+                            <p><strong>Negative Mark:</strong> {question.negativeMark}</p>
 
-  if (error) {
-    return <div className="error">{error}</div>;
-  }
-
-  return (
-    <div className="edit-question-container">
-      <h1>Edit Questions</h1>
-      <form onSubmit={handleSubmit}>
-        {questions.map((question, index) => (
-          <div key={question.id}>
-            <h2>Question {index + 1}</h2>
-
-            <div className="form-group">
-              <label>Question Text:</label>
-              <input
-                type="text"
-                name="question_text"
-                value={question.question_text}
-                onChange={(e) => handleChange(e, index)}
-              />
+                            {/* Edit Button */}
+                            <button
+                                className="btn edit-btn"
+                                onClick={() => handleEditClick(index)}
+                            >
+                                Edit
+                            </button>
+                        </li>
+                    ))}
+                </ul>
             </div>
-
-            <div className="form-group">
-              <label>Options (comma separated):</label>
-              <input
-                type="text"
-                name="options"
-                value={question.options.join(', ')}
-                onChange={(e) => handleChange(e, index)}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Correct Option:</label>
-              <input
-                type="text"
-                name="correct_option"
-                value={question.correct_option}
-                onChange={(e) => handleChange(e, index)}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Mark:</label>
-              <input
-                type="number"
-                name="mark"
-                value={question.mark}
-                onChange={(e) => handleChange(e, index)}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Negative Mark:</label>
-              <input
-                type="number"
-                name="negative_mark"
-                value={question.negative_mark}
-                onChange={(e) => handleChange(e, index)}
-              />
-            </div>
-          </div>
-        ))}
-
-        <button type="submit">Save</button>
-      </form>
-    </div>
-  );
+        </div>
+    );
 };
 
 export default EditQuestion;

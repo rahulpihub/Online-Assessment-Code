@@ -2,6 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Question  # Assuming you have a Question model
+from .serializers import QuestionSerializer
+
 
 class StaffHomeView(APIView):
     def get(self, request, *args, **kwargs):
@@ -43,12 +45,6 @@ class AddQuestionView(APIView):
             print(f"Error occurred: {e}")  # Log error to console
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from .models import Question
-from .serializers import QuestionSerializer
 
 class QuestionListView(APIView):
     def get(self, request):
